@@ -24,7 +24,7 @@ use MMF\Core\Controller;
 
 //This line is very important in all PHP files. With this, you avoid
 //direct access to script typing in browser
-// example.com/App/Controller/ControllerName.php
+//example.com/App/Controller/ControllerName.php
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
 /**
@@ -32,6 +32,9 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
  *
  * @package App\Controller
  */
+//You need extends Controller class.
+//Opcionally, you can not import \App\Controller and extend
+//\App\Contoller like class Welcome extends \App\Controller.
 class Welcome extends Controller {
     /**
      * Welcome constructor.
