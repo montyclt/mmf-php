@@ -18,6 +18,7 @@
 
 namespace MMF\Core;
 
+defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
 class Controller {
 
