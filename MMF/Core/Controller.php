@@ -22,7 +22,16 @@ namespace MMF\Core;
 class Controller {
 
     /**
-     * Override this method in controller child, and the
+     * Retrieve data from post and return it a object.
      */
-    public function all() {}
+    public function post() {
+
+    }
+
+    /**
+     *
+     */
+    public function get() {
+
+    }
 }
