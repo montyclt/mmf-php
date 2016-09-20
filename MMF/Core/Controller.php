@@ -22,16 +22,18 @@ namespace MMF\Core;
 class Controller {
 
     /**
-     * Retrieve data from post and return it a object.
+     * Retrieve data from post HTTP method and return it a object.
      */
     public function post() {
-
+        //todo Sanitizar entrada de datos.
+        return (object)$_POST;
     }
 
     /**
-     *
+     * Retrieve data from post HTTP method and return it a object.
      */
     public function get() {
-
+        //todo Sanitizar entrada de datos.
+        return (object)$_GET;
     }
 }
