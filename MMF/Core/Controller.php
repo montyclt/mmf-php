@@ -23,18 +23,32 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 class Controller {
 
     /**
-     * Retrieve data from post HTTP method and return it a object.
+     * Retrieve data from post HTTP method.
+     * @param $key
+     * @return string
      */
-    public function post() {
-        //todo Sanitizar entrada de datos.
-        return (object)$_POST;
+    public function post($key) {
+        return $this->sanitize($_POST[$key]);
     }
 
     /**
-     * Retrieve data from post HTTP method and return it a object.
+     * Retrieve data from post HTTP method.
+     * @param $key
+     * @return string
      */
-    public function get() {
-        //todo Sanitizar entrada de datos.
-        return (object)$_GET;
+    public function get($key) {
+        return $this->sanitize($_GET[$key]);
+    }
+
+    /**
+     * Sanitize an input string.
+     *
+     * @param $string
+     * @return string
+     * @todo Buscar una forma de sanitizar strings mejor.
+     */
+    private function sanitize($string) {
+        $string = filter_var($string, FILTER_SANITIZE_STRING);
+        return $string;
     }
 }
