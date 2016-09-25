@@ -5,25 +5,38 @@ namespace MMF\Core\Database;
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
 use MMF\Core\Database\Exception\CursorException;
-use MMF\Core\Database\Exception\QueryException;
 use mysqli;
+use mysqli_result;
+use mysqli_stmt;
 
 /**
  * Class Cursor
  */
 class Cursor {
-    const FETCH_ASSOC  = 2;
-    const FETCH_NUM    = 3;
-    const FETCH_OBJECT = 5;
-    const FETCH_CLASS  = 8;
+    const FETCH_ASSOC  = 1;
+    const FETCH_NUM    = 2;
+    const FETCH_BOTH   = 3;
 
+    /**
+     * @var mysqli
+     */
     private $mysqli;
+
+    /**
+     * @var mysqli_result
+     */
     private $result;
+
+    /**
+     * @var mysqli_stmt
+     */
     private $statement;
 
     /**
      * DatabaseCursor constructor.
+     *
      * @param Credentials $credentials
+     * @throws CursorException
      */
     function __construct($credentials) {
         if ($credentials->getPort()) {
@@ -42,6 +55,8 @@ class Cursor {
                 $credentials->getDatabase()
             );
         }
+
+        if ($this->mysqli->connect_errno) throw new CursorException(CursorException::MSG_CONNECTION_ERROR);
     }
 
     /**
@@ -57,20 +72,48 @@ class Cursor {
 
     /**
      * Prepare a MySQL query.
+     *
      * @param $sql
-     * @param array $driver_options
+     * @throws CursorException
      */
-    public function prepare($sql, $driver_options = []) {
-
+    public function prepare($sql) {
+        $result = $this->mysqli->prepare($sql);
+        if (!$result) throw new CursorException(CursorException::MSG_PREPARE_ERROR);
+        $this->statement = $result;
     }
 
+    /**
+     * Execute a prepared statement.
+     *
+     * @param array $data
+     * @throws CursorException
+     */
     public function execute($data) {
-
+        $types = "";
+        foreach ($data as $item) {
+            if (is_int($item)) $types .= "i";
+            else if (is_double($item)) $types .= "d";
+            else if (is_string($item)) $types .= "s";
+            else if (is_resource($item) or is_object($item)) $types .= "b";
+        }
+        call_user_func_array([$this->statement, "bind_param"], $data);
+        $result = $this->statement->execute();
+        if (!$result) throw new CursorException(CursorException::MSG_QUERY_ERROR);
+        else if (!$result === true) {
+            $this->result = $this->statement->get_result();
+        }
     }
 
-
+    /**
+     * Do a database query.
+     *
+     * @param $sql
+     * @throws CursorException
+     */
     public function query($sql) {
-
+        $result = $this->mysqli->query($sql);
+        if (!$result) throw new CursorException(CursorException::MSG_QUERY_ERROR);
+        $this->result = $result;
     }
 
     public function fetch($fecth_type) {
@@ -78,34 +121,20 @@ class Cursor {
     }
 
     public function fetchAll($fetch_type) {
-        $data = [];
-        while ($row = $this->fetch($fetch_type)) {
-            array_push($data, $row);
-        }
-        return $row;
-    }
-
-    public function beginTransaction() {
-
+        $this->result->fetch_all($fetch_type);
     }
 
     public function isConnectionActive() {
         return $this->mysqli->ping();
     }
 
-    public function isTransactionActive() {
-
-    }
-
-    public function commitTransiction() {
-
-    }
-
-    public function close() {
+    /**
+     * Disconnect cursor from Database.
+     *
+     * @throws CursorException
+     */
+    public function disconnect() {
         $result = $this->mysqli->close();
-        if (!$result) throw new CursorException(
-            CursorException::MSG_CURSOR_UNCLOSED,
-            CursorException::CODE_CURSOR_UNCLOSED
-        );
+        if (!$result) throw new CursorException(CursorException::MSG_CURSOR_UNCLOSED);
     }
 }

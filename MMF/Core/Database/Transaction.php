@@ -1,6 +1,6 @@
 <?php
 /**
- * File: CursorException.php
+ * File: Transaction.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
  * Created by Ivan Montilla <personal@ivanmontilla.es>
@@ -16,13 +16,27 @@
  * Get started in docs.mmf-php.com/quickstart
  */
 
-namespace MMF\Core\Database\Exception;
+namespace MMF\Core\Database;
 
-use Exception;
+/**
+ * Use this class for do a database transaction.
+ *
+ * @package MMF\Core\Database
+ */
+class Transaction {
+    public function begin() {
 
-class CursorException extends Exception {
-    const MSG_CURSOR_UNCLOSED   = "Error closing connection";
-    const MSG_QUERY_ERROR       = "Error executing query";
-    const MSG_PREPARE_ERROR     = "Error preparing statement";
-    const MSG_CONNECTION_ERROR  = "Error connecting to database";
+    }
+
+    public function isActive() {
+
+    }
+
+    public function addStatement() {
+
+    }
+
+    public function commit() {
+
+    }
 }

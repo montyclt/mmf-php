@@ -27,8 +27,10 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
  * @package MMF\MMF.Core\Database
  */
 class Entity {
+    /**
+     * @var Cursor
+     */
     private $cursor;
-    private $database;
     private $table;
 
     public function __construct() {
