@@ -21,8 +21,9 @@ namespace MMF\Core\Database\Exception;
 use Exception;
 
 class CursorException extends Exception {
-    const MSG_CURSOR_UNCLOSED   = "Error closing connection";
-    const MSG_QUERY_ERROR       = "Error executing query";
-    const MSG_PREPARE_ERROR     = "Error preparing statement";
-    const MSG_CONNECTION_ERROR  = "Error connecting to database";
+    const MSG_CURSOR_UNCLOSED    = "Error closing connection";
+    const MSG_QUERY_ERROR        = "Error executing query";
+    const MSG_PREPARE_ERROR      = "Error preparing statement";
+    const MSG_CONNECTION_ERROR   = "Error connecting to database";
+    const MSG_INVALID_FETCH_TYPE = "Invalid fetch type";
 }

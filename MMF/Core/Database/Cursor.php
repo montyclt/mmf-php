@@ -116,11 +116,13 @@ class Cursor {
         $this->result = $result;
     }
 
-    public function fetch($fecth_type) {
-
+    public function fetch($fetch_type) {
+        if ($fetch_type < 1 or $fetch_type > 3) throw new CursorException(CursorException::MSG_INVALID_FETCH_TYPE);
+        $this->result->fetch_array($fetch_type);
     }
 
     public function fetchAll($fetch_type) {
+        if ($fetch_type < 1 or $fetch_type > 3) throw new CursorException(CursorException::MSG_INVALID_FETCH_TYPE);
         $this->result->fetch_all($fetch_type);
     }
 
