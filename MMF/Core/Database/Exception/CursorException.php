@@ -1,6 +1,6 @@
 <?php
 /**
- * File: QueryException.php
+ * File: CursorException.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
  * Created by Ivan Montilla <personal@ivanmontilla.es>
@@ -20,6 +20,12 @@ namespace MMF\Core\Database\Exception;
 
 use Exception;
 
-class QueryException extends Exception{
+class CursorException extends Exception {
+    const CODE_CURSOR_UNCLOSED  = -1;
+    const CODE_QUERY_ERROR      = -2;
+    const CODE_PREPARE_ERROR    = -3;
 
+    const MSG_CURSOR_UNCLOSED   = "Error closing connection";
+    const MSG_QUERY_ERROR       = "Error executing query";
+    const MSG_PREPARE_ERROR     = "Error preparing statement";
 }

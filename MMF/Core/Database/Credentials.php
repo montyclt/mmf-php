@@ -18,15 +18,15 @@ class Credentials {
     private $username;
     private $password;
     private $database;
-    private $driver;
+    private $port;
 
-    function __construct($alias, $hostname, $username, $password, $database, $driver) {
+    function __construct($alias, $hostname, $username, $password, $database, $port = null) {
         $this->alias    = $alias;
         $this->hostname = $hostname;
         $this->username = $username;
         $this->password = $password;
         $this->database = $database;
-        $this->driver   = $driver;
+        $this->port     = $port;
     }
 
     /**
@@ -39,15 +39,26 @@ class Credentials {
     public static function getCredentialsByAlias($alias) {
         foreach (Environment::getConfigObject()->DatabaseCredentials as $credentials) {
             if ($credentials->alias == $alias) {
-                return new Credentials
-                (
-                    $credentials->alias,
-                    $credentials->hostname,
-                    $credentials->username,
-                    $credentials->password,
-                    $credentials->database,
-                    $credentials->driver
-                );
+                if (isset($credentials->port)) {
+                    return new Credentials
+                    (
+                        $credentials->alias,
+                        $credentials->hostname,
+                        $credentials->username,
+                        $credentials->password,
+                        $credentials->database,
+                        $credentials->port
+                    );
+                } else {
+                    return new Credentials
+                    (
+                        $credentials->alias,
+                        $credentials->hostname,
+                        $credentials->username,
+                        $credentials->password,
+                        $credentials->database
+                    );
+                }
             }
         }
 
@@ -100,11 +111,11 @@ class Credentials {
     }
 
     /**
-     * Return the driver name as string.
+     * Return the port as int.
      *
-     * @return string
+     * @return int
      */
-    public function getDriver() {
-        return $this->driver;
+    public function getPort() {
+        return $this->port;
     }
 }

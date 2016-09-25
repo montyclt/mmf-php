@@ -4,9 +4,9 @@ namespace MMF\Core\Database;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
-use Core\Database\Exception\QueryException;
-use PDO;
-use PDOStatement;
+use MMF\Core\Database\Exception\CursorException;
+use MMF\Core\Database\Exception\QueryException;
+use mysqli;
 
 /**
  * Class Cursor
@@ -17,13 +17,8 @@ class Cursor {
     const FETCH_OBJECT = 5;
     const FETCH_CLASS  = 8;
 
-    /**
-     * @var PDO
-     */
-    private $pdo;
-    /**
-     * @var PDOStatement
-     */
+    private $mysqli;
+    private $result;
     private $statement;
 
     /**
@@ -31,9 +26,33 @@ class Cursor {
      * @param Credentials $credentials
      */
     function __construct($credentials) {
-        $dsn = $credentials->getDriver() . ":host=" . $credentials->getHostname() .
-            ";dbname=" . $credentials->getDatabase();
-        $this->pdo = new PDO($dsn, $credentials->getUsername(), $credentials->getPassword());
+        if ($credentials->getPort()) {
+            $this->mysqli = new mysqli(
+                $credentials->getHostname(),
+                $credentials->getUsername(),
+                $credentials->getPassword(),
+                $credentials->getDatabase(),
+                $credentials->getPort()
+            );
+        } else {
+            $this->mysqli = new mysqli(
+                $credentials->getHostname(),
+                $credentials->getUsername(),
+                $credentials->getPassword(),
+                $credentials->getDatabase()
+            );
+        }
+    }
+
+    /**
+     * Get a Cursor object with credentials defined in config.json
+     * Use an alias to select
+     *
+     * @param string $database_alias
+     * @return Cursor
+     */
+    public static function getCursorByAlias($database_alias) {
+        return new Cursor(Credentials::getCredentialsByAlias($database_alias));
     }
 
     /**
@@ -42,43 +61,51 @@ class Cursor {
      * @param array $driver_options
      */
     public function prepare($sql, $driver_options = []) {
-        $this->statement = $this->pdo->prepare($sql, $driver_options);
+
     }
 
     public function execute($data) {
-        $ok = $this->statement->execute($data);
-        if (!$ok) throw new QueryException();
+
     }
+
 
     public function query($sql) {
-        $result = $this->pdo->query($sql);
-        if (!$result) throw new QueryException();
-        $this->pdo = $result;
+
     }
 
-
     public function fetch($fecth_type) {
-        return $this->statement->fetch($fecth_type);
+
     }
 
     public function fetchAll($fetch_type) {
-        return $this->fetchAll($fetch_type);
+        $data = [];
+        while ($row = $this->fetch($fetch_type)) {
+            array_push($data, $row);
+        }
+        return $row;
     }
 
     public function beginTransaction() {
-        $this->pdo->beginTransaction();
+
+    }
+
+    public function isConnectionActive() {
+        return $this->mysqli->ping();
     }
 
     public function isTransactionActive() {
-        return $this->pdo->inTransaction();
+
     }
 
-    public function commit() {
-        $ok = $this->pdo->commit();
-        if (!$ok) throw new QueryException();
+    public function commitTransiction() {
+
     }
 
-    public static function getCursor($database_alias) {
-        return new Cursor(Credentials::getCredentialsByAlias($database_alias));
+    public function close() {
+        $result = $this->mysqli->close();
+        if (!$result) throw new CursorException(
+            CursorException::MSG_CURSOR_UNCLOSED,
+            CursorException::CODE_CURSOR_UNCLOSED
+        );
     }
 }

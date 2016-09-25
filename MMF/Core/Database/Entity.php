@@ -27,18 +27,27 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
  * @package MMF\MMF.Core\Database
  */
 class Entity {
-    private $id;
+    private $cursor;
+    private $database;
     private $table;
+
+    public function __construct() {
+
+    }
 
     public function save() {
 
     }
 
-    public static function findById($id) {
+    public static function getById($id) {
 
     }
 
-    public static function find($column, $value) {
+    public static function find($column, $value, $limit = 0) {
+
+    }
+
+    public static function getAll($order_by = null) {
 
     }
 }

@@ -7,21 +7,17 @@
   "DatabaseCredentials" : [
     {
       "alias"    : "Example1",
-      "hostname" : "host1.net",
+      "hostname" : "localhost",
       "username" : "username1",
       "password" : "password1",
-      "database" : "database1",
-      "port"     : "3306",
-      "driver"   : "mysql"
+      "database" : "example1"
     },
     {
       "alias"    : "Example2",
-      "hostname" : "host2.net",
+      "hostname" : "localhost",
       "username" : "username2",
       "password" : "password2",
-      "database" : "database2",
-      "port"     : "3306",
-      "driver"   : "mysql"
+      "database" : "example2"
     }
   ],
   "Email" : {
