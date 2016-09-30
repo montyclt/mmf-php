@@ -28,6 +28,7 @@ function mmfAutoload($class) {
 if (Environment::isProductionEnvironment()) {
     error_reporting(0);
     ini_set("display_errors", false);
+    header('Content-Type: application/json');
 }
 
 $path = [];
@@ -59,5 +60,4 @@ if (is_object($response)) {
     }
 }
 
-header('Content-Type: application/json');
 echo json_encode($response);

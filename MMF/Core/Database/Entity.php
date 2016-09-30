@@ -19,19 +19,16 @@
 
 namespace MMF\Core\Database;
 
+use MMF\Core\Database\Cursor;
+
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
 /**
  * Class Entity
  *
- * @package MMF\MMF.Core\Database
+ * @package MMF\Core\Database
  */
 class Entity {
-    /**
-     * @var Cursor
-     */
-    private $cursor;
-    private $table;
 
     public function __construct() {
 

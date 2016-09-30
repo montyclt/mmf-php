@@ -118,16 +118,22 @@ class Cursor {
 
     public function fetch($fetch_type) {
         if ($fetch_type < 1 or $fetch_type > 3) throw new CursorException(CursorException::MSG_INVALID_FETCH_TYPE);
-        $this->result->fetch_array($fetch_type);
+        return $this->result->fetch_array($fetch_type);
     }
 
     public function fetchAll($fetch_type) {
         if ($fetch_type < 1 or $fetch_type > 3) throw new CursorException(CursorException::MSG_INVALID_FETCH_TYPE);
-        $this->result->fetch_all($fetch_type);
+        return $this->result->fetch_all($fetch_type);
     }
 
     public function isConnectionActive() {
         return $this->mysqli->ping();
+    }
+
+    public function changeDatabase($credentials) {
+        $this->disconnect();
+        unset($this->mysqli);
+        $this->__construct($credentials);
     }
 
     /**
@@ -138,5 +144,9 @@ class Cursor {
     public function disconnect() {
         $result = $this->mysqli->close();
         if (!$result) throw new CursorException(CursorException::MSG_CURSOR_UNCLOSED);
+    }
+
+    public function __destruct() {
+        $this->disconnect();
     }
 }

@@ -1,11 +1,16 @@
 <?php
+
+namespace App\Entity;
+
 use MMF\Core\Database\Entity;
 
 /**
+ * NOTE: This file is an example of ORM Entity.
+ *
  * File: User.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
- * Created by Ivan Montilla <personal@ivanmontilla.es>
+ * Created by Ivan Montilla
  *
  * Official website:  mmf-php.com
  * Documentation:     docs.mmf-php.com
@@ -16,9 +21,31 @@ use MMF\Core\Database\Entity;
  * with profit, but never sell this framework or adaption.
  *
  * Get started in docs.mmf-php.com/quickstart
+ *
+ * @Table User
+ * @ConnectionAlias Example1
  */
 class User extends Entity {
+
+    /**
+     * @Column id
+     * @ColumnType int
+     * @var int
+     */
+    private $id;
+
+    /**
+     * @Column username
+     * @ColumType varchar
+     * @var string
+     */
     private $username;
+
+    /**
+     * @Column username
+     * @ColumType varchar
+     * @var string
+     */
     private $password;
 
     /**

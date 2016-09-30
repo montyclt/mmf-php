@@ -1,5 +1,7 @@
 <?php
 /**
+ * NOTE: This file is an example of Controller.
+ *
  * File: Welcome.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
@@ -69,7 +71,7 @@ class Welcome extends Controller {
 
     /**
      * Example method with parameters.
-     * Call this method in example.com/index.php/Welcome/startWithParameters/name/Peter
+     * Call this method in example.com/index.php/Welcome/startWithParameters/username/Peter
      *
      * @param string $key
      * @param string $value

@@ -18,6 +18,13 @@
       "username" : "username2",
       "password" : "password2",
       "database" : "example2"
+    },
+    {
+      "alias"    : "test",
+      "hostname" : "localhost",
+      "username" : "root",
+      "password" : "",
+      "database" : "mmf_test"
     }
   ],
   "Email" : {
