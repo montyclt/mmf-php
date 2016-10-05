@@ -30,25 +30,21 @@ class AnnotationManager {
 
     /**
      * AnnotationManager constructor.
-     * @param string $classname
-     * @param string|null $namespace
+     * @param $reflectionClass
+     * @tested
      */
-    public function __construct($classname, $namespace = null) {
-        $this->setReflectionClass($classname, $namespace);
+    public function __construct($reflectionClass) {
+        $this->setReflectionClass($reflectionClass);
     }
 
     /**
      * Set the class that this manager point.
      *
-     * @param $classname
-     * @param string|null $namespace
+     * @param ReflectionClass $reflectionClass
+     * @tested
      */
-    public function setReflectionClass($classname, $namespace = null) {
-        if ($namespace !== null) {
-            $this->reflectionClass = new ReflectionClass("\\" . $namespace . "\\" . $classname);
-        } else {
-            $this->reflectionClass = new ReflectionClass($classname);
-        }
+    public function setReflectionClass($reflectionClass) {
+        $this->reflectionClass = $reflectionClass;
     }
 
     /**
@@ -60,6 +56,12 @@ class AnnotationManager {
         return $this->getAnnotationArrayFromDocComment($this->reflectionClass->getDocComment());
     }
 
+    /**
+     * Get array of annotations from a method.
+     *
+     * @param string $method
+     * @return string[]
+     */
     public function getMethodAnnotations($method) {
         $reflectationMethod = new ReflectionMethod($this->reflectionClass->getName(), $method);
         return $this->getAnnotationArrayFromDocComment($reflectationMethod->getDocComment());
@@ -70,13 +72,58 @@ class AnnotationManager {
         return $this->getAnnotationArrayFromDocComment($reflectationProperty->getDocComment());
     }
 
-    public function getAnnotationArrayFromDocComment($docComment) {
-        $annotations = explode("@", $docComment);
+    public function docCommentHasAnnotation($docComment, $annotation) {
+        $annotations = $this->getAnnotationArrayFromDocComment($docComment);
+        foreach ($annotations as $annotationInDocComment) {
+            if (isset($annotationInDocComment[$annotation])) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return an array of fields (ReflectionProperty) that have an annotation.
+     *
+     * @param string $annotation
+     * @return ReflectionProperty[]
+     */
+    public function getFieldsWithAnnotation($annotation, $value = null) {
+        $fields = $this->reflectionClass->getProperties();
+        $fieldsWithAnnotation = [];
+        foreach ($fields as $field) {
+            foreach ($this->getAnnotationArrayFromDocComment($field->getDocComment()) as $annotationInField) {
+                if ($annotationInField == $annotation) array_push($fieldsWithAnnotation, $field);
+            }
+        }
+        return $fieldsWithAnnotation;
+    }
+
+    public function getMethodsWithAnnotation($annotation) {
+
+    }
+
+    public function fieldHasAnnotation($field, $annotation)
+    {
+        $fields = $this->getFieldsWithAnnotation($annotation);
+        foreach ($fields as $fieldWithAnnotation) {
+            if ($field == $fieldWithAnnotation->getName()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Return an array of annotations from a documentation comment.
+     *
+     * @param string $docComment
+     * @return string[]
+     * @tested
+     */
+    private function getAnnotationArrayFromDocComment($docComment) {
         $annotationsArray = [];
-        foreach (array_slice($annotations, 1) as $annotation) {
-            $words = explode(" ", explode("\n", $annotation)[0], 2);
-            if (isset($words[1])) $annotationsArray[trim($words[0])] = explode("\n", trim($words[1]))[0];
-            else $annotationsArray[trim($words[0])] = "";
+        preg_match_all('# @(.*?)\n#s', $docComment, $annotations);
+        foreach ($annotations[1] as $annotation) {
+            $explotedAnnotation = explode(" ", $annotation, 2);
+            if (isset($explotedAnnotation[1])) $annotationsArray[trim($explotedAnnotation[0])] = trim($explotedAnnotation[1]);
+            else $annotationsArray[trim($explotedAnnotation[0])] = "";
         }
         return $annotationsArray;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use MMF\Core\Annotation\AnnotationManager;
 use MMF\Core\Database\Cursor;
 
@@ -15,11 +16,11 @@ class Sumadora {
     }
 
     function getUser() {
-        $user = \User::getAll();
+        $user = User::getAll();
     }
 
     function annotaciones() {
-        $reader = new AnnotationManager("User", "App\\Entity");
-        return $reader->getFieldAnnotations("id");
+        $reader = new AnnotationManager(new \ReflectionClass("\\App\\Entity\\User"));
+        return $reader->getClassAnnotations();
     }
 }

@@ -19,7 +19,9 @@
 
 namespace MMF\Core\Database;
 
-use MMF\Core\Database\Cursor;
+use Iterator;
+use MMF\Core\Annotation\AnnotationManager;
+use ReflectionClass;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
@@ -28,13 +30,30 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
  *
  * @package MMF\Core\Database
  */
-class Entity {
+abstract class Entity {
 
+    private $cursor;
+    private $tableName;
+    private $annotationManager;
+
+    /**
+     * Entity constructor.
+     */
     public function __construct() {
-
+        $this->annotationManager = new AnnotationManager(new ReflectionClass($this));
+        $this->tableName = $this->annotationManager->getClassAnnotations()["Table"];
+//        $this->databaseName = Credentials::getCredentialsByAlias($annotationManager->getClassAnnotations()["ConnectionAlias"])->getDatabase();
+        $this->cursor = Cursor::getCursorByAlias($this->annotationManager->getClassAnnotations()["ConnectionAlias"]);
     }
 
     public function save() {
+        $arrayToInsert = [];
+        foreach ($this as $key => $field) {
+            if ($this->annotationManager->fieldHasAnnotation($field, "Column")) {
+                $column = $this->annotationManager->getFieldAnnotations("Column");
+                $arrayToInsert[$column] = $field;
+            }
+        }
 
     }
 
@@ -42,11 +61,19 @@ class Entity {
 
     }
 
-    public static function find($column, $value, $limit = 0) {
+    public static function where($column, $value, $limit = 0) {
 
     }
 
     public static function getAll($order_by = null) {
 
+    }
+
+    public function getColumn($column) {
+        return $this->annotationManager->getFieldsWithAnnotation("Column " . $column)[0];
+    }
+
+    private function getColumnId() {
+        return $this->annotationManager->getFieldsWithAnnotation("ColumnId")[0];
     }
 }

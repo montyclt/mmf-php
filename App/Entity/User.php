@@ -10,7 +10,7 @@ use MMF\Core\Database\Entity;
  * File: User.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
- * Created by Ivan Montilla
+ * Created by Ivan Montilla <example@example.com>
  *
  * Official website:  mmf-php.com
  * Documentation:     docs.mmf-php.com
@@ -22,6 +22,9 @@ use MMF\Core\Database\Entity;
  *
  * Get started in docs.mmf-php.com/quickstart
  *
+ * @author Ivan Montilla
+ * @packgae App\Entity
+ *
  * @Table User
  * @ConnectionAlias Example1
  */
@@ -29,13 +32,14 @@ class User extends Entity {
 
     /**
      * @Column id
+     * @ColumnId
      * @ColumnType int
      * @var int
      */
     private $id;
 
     /**
-     * @Column username
+     * @Column username and pepe
      * @ColumType varchar
      * @var string
      */
@@ -78,5 +82,21 @@ class User extends Entity {
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 }
