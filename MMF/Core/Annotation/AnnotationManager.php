@@ -1,6 +1,6 @@
 <?php
 /**
- * File: Reader.php
+ * File: AnnotationManager.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
  * Created by Ivan Montilla <personal@ivanmontilla.es>
@@ -51,6 +51,7 @@ class AnnotationManager {
      * Return an associative array of strings with class annotation.
      *
      * @return string[]
+     * @tested
      */
     public function getClassAnnotations() {
         return $this->getAnnotationArrayFromDocComment($this->reflectionClass->getDocComment());
@@ -67,17 +68,15 @@ class AnnotationManager {
         return $this->getAnnotationArrayFromDocComment($reflectationMethod->getDocComment());
     }
 
+    /**
+     * Get array of annotations from a field.
+     *
+     * @param $field
+     * @return string[]
+     */
     public function getFieldAnnotations($field) {
         $reflectationProperty = new ReflectionProperty($this->reflectionClass->getName(), $field);
         return $this->getAnnotationArrayFromDocComment($reflectationProperty->getDocComment());
-    }
-
-    public function docCommentHasAnnotation($docComment, $annotation) {
-        $annotations = $this->getAnnotationArrayFromDocComment($docComment);
-        foreach ($annotations as $annotationInDocComment) {
-            if (isset($annotationInDocComment[$annotation])) return true;
-        }
-        return false;
     }
 
     /**
@@ -106,6 +105,21 @@ class AnnotationManager {
         $fields = $this->getFieldsWithAnnotation($annotation);
         foreach ($fields as $fieldWithAnnotation) {
             if ($field == $fieldWithAnnotation->getName()) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if docComment has some annotation.
+     *
+     * @param string $docComment
+     * @param string $annotation
+     * @return bool
+     */
+    private function docCommentHasAnnotation($docComment, $annotation) {
+        $annotations = $this->getAnnotationArrayFromDocComment($docComment);
+        foreach ($annotations as $annotationInDocComment) {
+            if (isset($annotationInDocComment[$annotation])) return true;
         }
         return false;
     }
