@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use MMF\Core\Annotation\AnnotationManager;
-use MMF\Core\Database\Cursor;
+use ReflectionClass;
 
 class Sumadora {
     function dosNumeros($n1, $n2) {
@@ -15,12 +14,13 @@ class Sumadora {
         return ["result" => $n1 + $n2 + $n3];
     }
 
-    function getUser() {
-        $user = User::getAll();
-    }
-
     function annotaciones() {
         $reader = new AnnotationManager(new \ReflectionClass("\\App\\Entity\\User"));
-        return $reader->getClassAnnotations();
+        return $reader->getFieldsWithAnnotation("ColumnType", "varchar");
+    }
+
+    function testDocComment() {
+        $annotationManager = new AnnotationManager(new ReflectionClass("\\MMF\\Core\\Annotation\\AnnotationManager"));
+        return ["test" => $annotationManager->getClassAnnotations()];
     }
 }

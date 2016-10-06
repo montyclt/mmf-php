@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * File: AnnotationManager.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
@@ -22,6 +22,12 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
 
+/**
+ * This class is a manager API to obtain annotations of class, fields and methods.
+ *
+ * @author Ivan Montilla
+ * @package MMF\Core\Annotation
+ */
 class AnnotationManager {
     /**
      * @var ReflectionClass
@@ -58,21 +64,11 @@ class AnnotationManager {
     }
 
     /**
-     * Get array of annotations from a method.
-     *
-     * @param string $method
-     * @return string[]
-     */
-    public function getMethodAnnotations($method) {
-        $reflectationMethod = new ReflectionMethod($this->reflectionClass->getName(), $method);
-        return $this->getAnnotationArrayFromDocComment($reflectationMethod->getDocComment());
-    }
-
-    /**
      * Get array of annotations from a field.
      *
      * @param $field
      * @return string[]
+     * @tested
      */
     public function getFieldAnnotations($field) {
         $reflectationProperty = new ReflectionProperty($this->reflectionClass->getName(), $field);
@@ -80,31 +76,64 @@ class AnnotationManager {
     }
 
     /**
+     * Get array of annotations from a method.
+     *
+     * @param string $method
+     * @return string[]
+     * @tested
+     */
+    public function getMethodAnnotations($method) {
+        $reflectationMethod = new ReflectionMethod($this->reflectionClass->getName(), $method);
+        return $this->getAnnotationArrayFromDocComment($reflectationMethod->getDocComment());
+    }
+
+    /**
      * Return an array of fields (ReflectionProperty) that have an annotation.
+     * The returned array is an associative array, with this format:  ["fieldName" => ReflectionProperty]
+     *
+     * If any field has the annotation, this method return an empty array.
+     *
+     * Optionally, can filter annotations with value only some value.
      *
      * @param string $annotation
+     * @param null|string $value
      * @return ReflectionProperty[]
+     * @tested
      */
     public function getFieldsWithAnnotation($annotation, $value = null) {
-        $fields = $this->reflectionClass->getProperties();
-        $fieldsWithAnnotation = [];
-        foreach ($fields as $field) {
-            foreach ($this->getAnnotationArrayFromDocComment($field->getDocComment()) as $annotationInField) {
-                if ($annotationInField == $annotation) array_push($fieldsWithAnnotation, $field);
-            }
-        }
-        return $fieldsWithAnnotation;
+        return $this->getReflectionsWithAnnotation($this->reflectionClass->getProperties(), $annotation, $value);
     }
 
-    public function getMethodsWithAnnotation($annotation) {
+    /**
+     * Return an array of methods (ReflectionMethod) that have an annotation.
+     * The returned array is an associative array, with this format:  ["methodName" => ReflectionMethod]
+     *
+     * If any field has the annotation, this method return an empty array.
+     *
+     * Optionally, can filter annotations with value only some value.
+     *
+     * @param string $annotation
+     * @param null|string $value
+     * @return ReflectionMethod[]|ReflectionProperty[]
+     * @tested
+     */
+    public function getMethodsWithAnnotation($annotation, $value = null) {
+        return $this->getReflectionsWithAnnotation($this->reflectionClass->getMethods(), $annotation, $value);
+    }
+
+    public function hasClassAnnotation($annotation, $value = null) {
 
     }
 
-    public function fieldHasAnnotation($field, $annotation)
+    public function hasMethodAnnotation($methodName, $annotation, $value = null) {
+
+    }
+
+    public function hasFieldAnnotation($fieldName, $annotation, $value = null)
     {
         $fields = $this->getFieldsWithAnnotation($annotation);
         foreach ($fields as $fieldWithAnnotation) {
-            if ($field == $fieldWithAnnotation->getName()) return true;
+            if ($fieldName == $fieldWithAnnotation->getName()) return true;
         }
         return false;
     }
@@ -126,6 +155,7 @@ class AnnotationManager {
 
     /**
      * Return an array of annotations from a documentation comment.
+     * Thanks http://stackoverflow.com/questions/39812351/getting-annotation-of-comment-in-php-i-get-too-an-email-of-comment
      *
      * @param string $docComment
      * @return string[]
@@ -140,5 +170,30 @@ class AnnotationManager {
             else $annotationsArray[trim($explotedAnnotation[0])] = "";
         }
         return $annotationsArray;
+    }
+
+    /**
+     * Get a ReflectionProperty or ReflectionMethod that has some annotation.
+     *
+     * @param ReflectionProperty[]|ReflectionMethod[] $reflections
+     * @param string $annotation
+     * @param string|null $value
+     * @return ReflectionProperty[]|ReflectionMethod[]
+     * @tested
+     */
+    private function getReflectionsWithAnnotation($reflections, $annotation, $value = null) {
+        $reflectionsWithAnnotation = [];
+        foreach ($reflections as $field) {
+            foreach ($this->getAnnotationArrayFromDocComment($field->getDocComment()) as $annotationName => $annotationValue) {
+                if ($annotationName == $annotation and ($annotationValue == $value or $value === null)) {
+                    $reflectionsWithAnnotation[$field->getName()] = $field;
+                }
+            }
+        }
+        return $reflectionsWithAnnotation;
+    }
+
+    private function hasReflectionAnnotation($annotation, $value) {
+
     }
 }

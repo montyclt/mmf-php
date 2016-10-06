@@ -39,21 +39,21 @@ class User extends Entity {
     private $id;
 
     /**
-     * @Column username and pepe
-     * @ColumType varchar
+     * @Column username
+     * @ColumnType varchar
      * @var string
      */
     private $username;
 
     /**
      * @Column username
-     * @ColumType varchar
+     * @ColumnType varchar
      * @var string
      */
     private $password;
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
