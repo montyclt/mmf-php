@@ -193,7 +193,15 @@ class AnnotationManager {
         return $reflectionsWithAnnotation;
     }
 
-    private function hasReflectionAnnotation($annotation, $value) {
-
+    /**
+     * Return true if some ReflecionProperty's or ReflectionMethod's have some annotation.
+     *
+     * @param ReflectionProperty[]|ReflectionMethod[] $reflections
+     * @param string $annotation
+     * @param string|null $value
+     * @return bool
+     */
+    private function hasReflectionWithAnnotation($reflections, $annotation, $value = null) {
+        return count($this->getReflectionsWithAnnotation($reflections, $annotation, $value)) > 0;
     }
 }
