@@ -21,7 +21,7 @@ namespace MMF\Script;
  * Extending this class you can create CLI scripts for making
  * task, for example, crons to update compiled database tables.
  *
- * @package MMF\MMF.Core.Script
+ * @package MMF\Script
  */
 abstract class Script {
     /**
