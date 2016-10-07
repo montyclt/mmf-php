@@ -1,6 +1,6 @@
 <?php
-/**
- * File: MMF.Core.Script.php
+/*
+ * File: Script.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
  * Created by Ivan Montilla <personal@ivanmontilla.es>
@@ -40,7 +40,7 @@ abstract class Script {
         echo "╚══════════════════════════════════════════════════════════════╝" . PHP_EOL . PHP_EOL;
         echo "Executing process method..." . PHP_EOL;
         $this->process();
-        echo "MMF.Core.Script execution finished." . PHP_EOL . PHP_EOL;
+        echo "Script execution finished." . PHP_EOL . PHP_EOL;
         $datetime_diff = $start_datetime->diff(new \DateTimeImmutable());
         echo "Elapsed " . $datetime_diff->h . " hours, " . $datetime_diff->m
             . " minutes and " . $datetime_diff->s . " seconds." . PHP_EOL . PHP_EOL;
