@@ -19,6 +19,7 @@
 namespace MMF\Core\Annotation;
 
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionProperty;
 
@@ -122,17 +123,33 @@ class AnnotationManager {
     }
 
     /**
+     *
+     *
+     * @param string|ReflectionProperty $field
+     * @param string $annotation
+     * @param string|null $value
+     * @throws ReflectionException
+     * @return bool
+     */
+    public function fieldHasAnnotation($field, $annotation, $value = null) {
+        if (is_string($field)) $field = $this->reflectionClass->getProperty($field);
+        return $this->docCommentHasAnnotation($field->getDocComment(), $annotation, $value);
+    }
+
+    /**
      * Check if docComment has some annotation.
      *
      * @param string $docComment
      * @param string $annotation
+     * @param string|null $value
      * @return bool
-     * @deprecated
      */
-    private function docCommentHasAnnotation($docComment, $annotation) {
+    private function docCommentHasAnnotation($docComment, $annotation, $value = null) {
         $annotations = $this->getAnnotationArrayFromDocComment($docComment);
         foreach ($annotations as $annotationInDocComment) {
-            if (isset($annotationInDocComment[$annotation])) return true;
+            if ((isset($annotationInDocComment[$annotation]) and $value === null) or ($annotationInDocComment[$annotation] == $value)) {
+                return true;
+            }
         }
         return false;
     }
