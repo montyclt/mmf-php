@@ -19,9 +19,9 @@
 namespace MMF\Core\Annotation;
 
 use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
 use ReflectionProperty;
+use ReflectionMethod;
+use ReflectionException;
 
 /**
  * This class is a manager API to obtain annotations of class, fields and methods.
@@ -125,6 +125,18 @@ class AnnotationManager {
     /**
      *
      *
+     * @param $annotation
+     * @param null $value
+     * @throws ReflectionException
+     * @return bool
+     */
+    public function classHasAnnotation($annotation, $value = null) {
+        return $this->docCommentHasAnnotation($this->reflectionClass->getDocComment(), $annotation, $value);
+    }
+
+    /**
+     *
+     *
      * @param string|ReflectionProperty $field
      * @param string $annotation
      * @param string|null $value
@@ -134,6 +146,20 @@ class AnnotationManager {
     public function fieldHasAnnotation($field, $annotation, $value = null) {
         if (is_string($field)) $field = $this->reflectionClass->getProperty($field);
         return $this->docCommentHasAnnotation($field->getDocComment(), $annotation, $value);
+    }
+
+    /**
+     *
+     *
+     * @param $method
+     * @param $annotation
+     * @param null $value
+     * @throws ReflectionException
+     * @return bool
+     */
+    public function methodHasAnnotation($method, $annotation, $value = null) {
+        if (is_string($method)) $method = $this->reflectionClass->getMethod($method);
+        return $this->docCommentHasAnnotation($method->getDocComment(), $annotation, $value);
     }
 
     /**
@@ -192,18 +218,5 @@ class AnnotationManager {
             }
         }
         return $reflectionsWithAnnotation;
-    }
-
-    /**
-     * Return true if some ReflecionProperty's or ReflectionMethod's have some annotation.
-     *
-     * @param ReflectionProperty[]|ReflectionMethod[] $reflections
-     * @param string $annotation
-     * @param string|null $value
-     * @return bool
-     * @deprecated
-     */
-    private function hasReflectionWithAnnotation($reflections, $annotation, $value = null) {
-        return count($this->getReflectionsWithAnnotation($reflections, $annotation, $value)) > 0;
     }
 }
