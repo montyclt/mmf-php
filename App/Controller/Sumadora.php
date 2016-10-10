@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use MMF\Core\Annotation\AnnotationManager;
+use MMF\Core\Controller;
 use ReflectionClass;
 
-class Sumadora {
+class Sumadora extends Controller{
     function dosNumeros($n1, $n2) {
         return ["result" => $n1 + $n2];
     }
@@ -22,5 +23,10 @@ class Sumadora {
     function testDocComment() {
         $annotationManager = new AnnotationManager(new ReflectionClass("\\MMF\\Core\\Annotation\\AnnotationManager"));
         return ["test" => $annotationManager->getClassAnnotations()];
+    }
+
+    public function index()
+    {
+        // TODO: Implement index() method.
     }
 }

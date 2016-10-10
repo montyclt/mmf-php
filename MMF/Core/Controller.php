@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * File: Controller.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
@@ -20,10 +20,27 @@ namespace MMF\Core;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
-class Controller {
+/**
+ * Controller base class. All controllers must be extends this class.
+ *
+ * @author Ivan Montilla
+ * @package MMF\Core
+ */
+abstract class Controller {
 
     /**
-     * Retrieve data from post HTTP method.
+     * This method is called when no function is defined on URL.
+     * This function don't accept URL parameters.
+     *
+     * A example URL that call this function is: example.com/Controller
+     *
+     * @return mixed
+     */
+    abstract public function index();
+
+    /**
+     * Retrieve and sanitize data from post HTTP method.
+     *
      * @param $key
      * @return string
      */
@@ -32,7 +49,8 @@ class Controller {
     }
 
     /**
-     * Retrieve data from post HTTP method.
+     * Retrieve and sanitize data from post HTTP method.
+     *
      * @param $key
      * @return string
      */
