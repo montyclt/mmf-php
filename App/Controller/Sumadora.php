@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use MMF\Core\Annotation\AnnotationManager;
 use MMF\Core\Controller;
+use MMF\Core\Input;
 use ReflectionClass;
 
 class Sumadora implements Controller {
@@ -41,5 +42,9 @@ class Sumadora implements Controller {
     public function index()
     {
         // TODO: Implement index() method.
+    }
+
+    public function getData() {
+        return Input::get("a");
     }
 }
