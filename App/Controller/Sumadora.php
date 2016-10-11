@@ -45,6 +45,6 @@ class Sumadora implements Controller {
     }
 
     public function getData() {
-        return Input::get("a");
+        return Input::requestAll();
     }
 }

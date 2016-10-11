@@ -16,7 +16,7 @@
  * Get started in docs.mmf-php.com/quickstart
  */
 
-namespace MMF\Core;
+namespace MMF\Core\Controller;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
