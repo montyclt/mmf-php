@@ -26,7 +26,7 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
  * @author Ivan Montilla
  * @package MMF\Core
  */
-abstract class Controller {
+interface Controller {
 
     /**
      * This method is called when no function is defined on URL.
@@ -34,39 +34,7 @@ abstract class Controller {
      *
      * A example URL that call this function is: example.com/Controller
      *
-     * @return mixed
+     * @return array|object
      */
-    abstract public function index();
-
-    /**
-     * Retrieve and sanitize data from post HTTP method.
-     *
-     * @param $key
-     * @return string
-     */
-    public function post($key) {
-        return $this->sanitize($_POST[$key]);
-    }
-
-    /**
-     * Retrieve and sanitize data from post HTTP method.
-     *
-     * @param $key
-     * @return string
-     */
-    public function get($key) {
-        return $this->sanitize($_GET[$key]);
-    }
-
-    /**
-     * Sanitize an input string.
-     *
-     * @param $string
-     * @return string
-     * @todo Buscar una forma de sanitizar strings mejor.
-     */
-    private function sanitize($string) {
-        $string = filter_var($string, FILTER_SANITIZE_STRING);
-        return $string;
-    }
+    public function index();
 }

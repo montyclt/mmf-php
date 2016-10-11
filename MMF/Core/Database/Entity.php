@@ -57,8 +57,9 @@ abstract class Entity {
 
     }
 
-    public static function getById($id) {
-
+    public function getById($id) {
+        $this->cursor->prepare("SELECT * FROM $this->tableName WHERE $this->getColumnId() = ?");
+        $this->cursor->execute([$id]);
     }
 
     public static function where($column, $value, $limit = 0) {
@@ -69,8 +70,12 @@ abstract class Entity {
 
     }
 
-    public function getColumn($column) {
-        return $this->annotationManager->getFieldsWithAnnotation("Column " . $column)[0];
+    private function getColumn($column) {
+        return $this->annotationManager->getFieldsWithAnnotation("Column", $column)[0];
+    }
+
+    private function getColumns() {
+        $this->annotationManager->getFieldsWithAnnotation("Column")[0];
     }
 
     private function getColumnId() {
