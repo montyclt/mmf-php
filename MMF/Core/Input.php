@@ -105,8 +105,8 @@ abstract class Input {
     /**
      * Sanitize input data to prevent attacks.
      *
-     * @param $data
-     * @return mixed
+     * @param string $data
+     * @return string
      */
     private static function sanitize($data) {
         return filter_var($data, FILTER_SANITIZE_STRING);
