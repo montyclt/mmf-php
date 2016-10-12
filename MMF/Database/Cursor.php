@@ -1,10 +1,10 @@
 <?php
 
-namespace MMF\Core\Database;
+namespace MMF\Database;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
-use MMF\Core\Database\Exception\CursorException;
+use MMF\Database\Exception\CursorException;
 use mysqli;
 use mysqli_result;
 use mysqli_stmt;

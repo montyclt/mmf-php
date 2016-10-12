@@ -1,6 +1,6 @@
 <?php
 /*
- * File: Controller.php
+ * File: ControllerInterface.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
  * Created by Ivan Montilla <personal@ivanmontilla.es>
@@ -16,7 +16,7 @@
  * Get started in docs.mmf-php.com/quickstart
  */
 
-namespace MMF\Core\Controller;
+namespace MMF\Controller;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
@@ -26,7 +26,7 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
  * @author Ivan Montilla
  * @package MMF\Core
  */
-interface Controller {
+interface ControllerInterface {
 
     /**
      * This method is called when no function is defined on URL.

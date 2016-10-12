@@ -15,7 +15,7 @@
  *
  * Get started in docs.mmf-php.com/quickstart
  */
-use MMF\Core\Environment;
+use MMF\Environment;
 
 define("IN_INDEX_FILE", true);
 

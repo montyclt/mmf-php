@@ -17,10 +17,9 @@
  * Get started in docs.mmf-php.com/quickstart
  */
 
-namespace MMF\Core\Database;
+namespace MMF\Database;
 
-use Iterator;
-use MMF\Core\Annotation\AnnotationManager;
+use MMF\Annotation\AnnotationManager;
 use ReflectionClass;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");

@@ -1,6 +1,6 @@
 <?php
 
-namespace MMF\Core\Database\Exception;
+namespace MMF\Database\Exception;
 
 use Exception;
 

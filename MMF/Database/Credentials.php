@@ -1,11 +1,11 @@
 <?php
 
-namespace MMF\Core\Database;
+namespace MMF\Database;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
-use MMF\Core\Database\Exception\InvalidAliasException;
-use MMF\Core\Environment;
+use MMF\Database\Exception\InvalidAliasException;
+use MMF\Environment;
 
 /**
  * Class Credentials encapsulated Database credentials access.

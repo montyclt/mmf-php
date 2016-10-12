@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use MMF\Core\Annotation\AnnotationManager;
-use MMF\Core\Controller;
-use MMF\Core\Input;
+use MMF\Annotation\AnnotationManager;
+use MMF\Controller\ControllerInterface;
 use ReflectionClass;
 
-class Sumadora implements Controller {
+class Sumadora implements ControllerInterface {
     function dosNumeros($n1, $n2) {
         return ["result" => $n1 + $n2];
     }
@@ -44,7 +43,7 @@ class Sumadora implements Controller {
         // TODO: Implement index() method.
     }
 
-    public function getData() {
-        return Input::requestAll();
+    public function getData($key, $value) {
+        return [$key => $value];
     }
 }

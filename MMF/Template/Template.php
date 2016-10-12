@@ -16,7 +16,7 @@
  * Get started in docs.mmf-php.com/quickstart
  */
 
-namespace MMF\Core\Template;
+namespace MMF\Template;
 
 /**
  * Class Template
