@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use MMF\Core\Database\Entity;
+use MMF\Database\Entity;
 
 /**
  * NOTE: This file is an example of ORM Entity.
@@ -26,7 +26,7 @@ use MMF\Core\Database\Entity;
  * @packgae App\Entity
  *
  * @Table User
- * @ConnectionAlias Example1
+ * @ConnectionAlias test
  */
 class User extends Entity {
 
@@ -36,67 +36,19 @@ class User extends Entity {
      * @ColumnType int
      * @var int
      */
-    private $id;
+    public $id;
 
     /**
      * @Column username
      * @ColumnType varchar
      * @var string
      */
-    private $username;
+    public $username;
 
     /**
      * @Column username
      * @ColumnType varchar
      * @var string
      */
-    private $password;
-
-    /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+    public $password;
 }

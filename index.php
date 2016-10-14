@@ -15,6 +15,7 @@
  *
  * Get started in docs.mmf-php.com/quickstart
  */
+use MMF\Controller\Exception\TypeOfResponseNotValidException;
 use MMF\Environment;
 
 define("IN_INDEX_FILE", true);
@@ -56,7 +57,7 @@ if (is_object($response)) {
     $response = get_object_vars($response);
 } else {
     if (!is_array($response)) {
-        throw new Exception(); //todo Crear clase para esta excepción.
+        throw new TypeOfResponseNotValidException();
     }
 }
 

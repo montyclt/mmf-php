@@ -20,7 +20,7 @@
 namespace MMF\Database;
 
 use MMF\Annotation\AnnotationManager;
-use ReflectionClass;
+use MMF\Database\Cursor;
 
 defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
 
@@ -31,53 +31,102 @@ defined("IN_INDEX_FILE") OR die("No direct script access allowed.");
  */
 abstract class Entity {
 
+    const FILTER_SMALLER = 1;
+    const FILTER_EQUALS = 2;
+    const FILTER_GREATER = 3;
+    const ORDER_ASC = 1;
+    const ORDER_DESC = 2;
+
+    /**
+     * @var array
+     */
+    private $columns = [];
+
+    /**
+     * @var Cursor
+     */
     private $cursor;
-    private $tableName;
+
+    /**
+     * @var string
+     */
+    private $dbAlias;
+
+    /**
+     * @var AnnotationManager
+     */
     private $annotationManager;
 
     /**
      * Entity constructor.
      */
     public function __construct() {
-        $this->annotationManager = new AnnotationManager(new ReflectionClass($this));
-        $this->tableName = $this->annotationManager->getClassAnnotations()["Table"];
-//        $this->databaseName = Credentials::getCredentialsByAlias($annotationManager->getClassAnnotations()["ConnectionAlias"])->getDatabase();
-        $this->cursor = Cursor::getCursorByAlias($this->annotationManager->getClassAnnotations()["ConnectionAlias"]);
+        $this->annotationManager = new AnnotationManager(new \ReflectionClass($this));
+        $this->dbAlias = $this->annotationManager->getClassAnnotations()["ConnectionAlias"];
+        $this->cursor = Cursor::getCursorByAlias($this->dbAlias);
+
+        $this->copyColumnsFiledsToColumnsArray();
     }
 
+    /**
+     * Persist in database.
+     */
     public function save() {
-        $arrayToInsert = [];
-        foreach ($this as $key => $field) {
-            if ($this->annotationManager->fieldHasAnnotation($field, "Column")) {
-                $column = $this->annotationManager->getFieldAnnotations("Column");
-                $arrayToInsert[$column] = $field;
-            }
+        $this->copyColumnsFiledsToColumnsArray();
+    }
+
+    /**
+     * Get new entity object filtering by ID.
+     *
+     * @param int $id
+     * @return Entity
+     */
+    public static function findById($id) {
+
+    }
+
+    /**
+     * Get an array of entities objects, filtering by column value.
+     *
+     * @param $column
+     * @param $value
+     * @param $criteria
+     * @param int $limit
+     * @return Entity[]
+     */
+    public static function findByFilter($column, $value, $criteria, $limit = 0) {
+
+    }
+
+    /**
+     * Get an array of all entities object in some table, opcionally can be specified an order.
+     *
+     * @param string|null $orderByColumn
+     * @param int $orderByCriteria
+     * @return Entity[]
+     */
+    public static function getAll($orderByColumn = null, $orderByCriteria = self::ORDER_ASC) {
+
+    }
+
+    /**
+     * Get an array of entities object, using custom SQL Query
+     *
+     * @param string $sqlCode
+     * @return Entity[]
+     */
+    public static function getWithCustomSQLQuery($sqlCode) {
+
+    }
+
+    private function copyColumnsFiledsToColumnsArray() {
+        foreach ($this->annotationManager->getFieldsWithAnnotation("Column") as $column) {
+            array_push($this->columns, [
+                "name" => $column->getName(),
+                "value" => $column->getValue($this),
+                "type" => "varchar", //todo Implement
+                "isId" => false //todo Implement
+            ]);
         }
-
-    }
-
-    public function getById($id) {
-        $this->cursor->prepare("SELECT * FROM $this->tableName WHERE $this->getColumnId() = ?");
-        $this->cursor->execute([$id]);
-    }
-
-    public static function where($column, $value, $limit = 0) {
-
-    }
-
-    public static function getAll($order_by = null) {
-
-    }
-
-    private function getColumn($column) {
-        return $this->annotationManager->getFieldsWithAnnotation("Column", $column)[0];
-    }
-
-    private function getColumns() {
-        $this->annotationManager->getFieldsWithAnnotation("Column")[0];
-    }
-
-    private function getColumnId() {
-        return $this->annotationManager->getFieldsWithAnnotation("ColumnId")[0];
     }
 }
