@@ -20,6 +20,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use MMF\Controller\ControllerInterface;
+use MMF\Database\Credentials;
+use MMF\Database\Cursor;
+use MMF\Template\Template;
 
 class Test implements ControllerInterface {
 
@@ -33,7 +36,19 @@ class Test implements ControllerInterface {
      */
     public function index()
     {
-        $user = new User();
-        return $user->columns;
+        $cursor = Cursor::getCursorByAlias("test");
+        $cursor->prepare("SELECT * FROM USERS WHERE id = ?");
+        $cursor->execute([1]);
+        $result = $cursor->fetchAll(Cursor::FETCH_NUM);
+        array_push($result, $cursor->isConnectionActive());
+        if ($cursor->isConnectionActive()) {
+            $cursor->changeDatabase(Credentials::getCredentialsByAlias("apes"));
+        }
+        $cursor->query("SELECT * from AP_CIUDADES");
+        $toReturn = [];
+        while ($row = $cursor->fetch(Cursor::FETCH_BOTH)) {
+            array_push($toReturn, $row);
+        }
+        return $toReturn;
     }
 }

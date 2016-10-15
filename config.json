@@ -24,7 +24,15 @@
       "hostname" : "localhost",
       "username" : "root",
       "password" : "",
-      "database" : "mmf_test"
+      "database" : "mmf_test",
+      "port" : 3306
+    },
+    {
+      "alias" : "apes",
+      "hostname" : "localhost",
+      "username" : "root",
+      "password" : "",
+      "database" : "apes"
     }
   ],
   "Email" : {

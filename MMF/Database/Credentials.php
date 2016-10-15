@@ -30,7 +30,7 @@ class Credentials {
     }
 
     /**
-     * Return new Credentials object using alias defined in Config/DatabasesCredentials.json
+     * Return new Credentials object using alias defined in config.json
      *
      * @param string $alias
      * @return Credentials
