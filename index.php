@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * File: index.php
  *
  * MMF (Monty Micro Framework). A PHP Micro Framework for Rest apps.
@@ -29,7 +29,7 @@ function mmfAutoload($class) {
 if (Environment::isProductionEnvironment()) {
     error_reporting(0);
     ini_set("display_errors", false);
-    header('Content-Type: application/json');
+    header('Content-Type: application/json; charset=utf-8');
 }
 
 $path = [];
@@ -61,4 +61,4 @@ if (is_object($response)) {
     }
 }
 
-echo json_encode($response);
+echo json_encode($response, JSON_UNESCAPED_UNICODE);
